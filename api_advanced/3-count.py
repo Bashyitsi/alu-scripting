@@ -7,12 +7,14 @@ import operator
 import requests
 
 
-def count_words(subreddit, word_list, after=None):
+def count_words(subreddit, word_list, after=None, recursive=True):
     """get all the keyword count"""
 
     if len(word_list) == 0:
-        print(None)
-        return
+        if recursive:
+            return "function is recursive"
+        else:
+            return None
     url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
     headers = {"User-Agent": "Mozilla/5.0"}
     result = requests.get(url,
@@ -41,7 +43,7 @@ def count_words(subreddit, word_list, after=None):
                 for k in j["data"]["title"].lower().split():
                     if i["key"] == k:
                         i["count"] = i["count"] + 1
-        return count_words(subreddit, newlist, body["data"]["after"])
+        return count_words(subreddit, newlist, body["data"]["after"], recursive)
     else:
         newlist = word_list
         if type(word_list[0]) is str:
@@ -66,12 +68,15 @@ def count_words(subreddit, word_list, after=None):
         key = operator.itemgetter("count")
         sorted_list = sorted(sorted_list, key=key, reverse=True)
         word_list = sorted_list
+        result = ""
         for i in sorted_list:
             if i["count"] > 0:
-                print("{}: {}".format(i["key"], i["count"] * i["times"]))
+                result += "{}: {}\n".format(i["key"], i["count"] * i["times"])
+        return result
 
 
 # Example usage:
 subreddit = "unpopular"
 keywords = ['down', 'vote', 'downvote', 'you', 'her', 'unpopular', 'politics']
-count_words(subreddit, keywords)
+output = count_words(subreddit, keywords, recursive=False)
+print(output)
