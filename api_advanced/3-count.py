@@ -7,14 +7,11 @@ import operator
 import requests
 
 
-def count_words(subreddit, word_list, after=None, recursive=True):
+def count_words(subreddit, word_list, after=None):
     """get all the keyword count"""
 
     if len(word_list) == 0:
-        if recursive:
-            return "function is recursive"
-        else:
-            return None
+        return "function is recursive"
     url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
     headers = {"User-Agent": "Mozilla/5.0"}
     result = requests.get(url,
@@ -43,7 +40,7 @@ def count_words(subreddit, word_list, after=None, recursive=True):
                 for k in j["data"]["title"].lower().split():
                     if i["key"] == k:
                         i["count"] = i["count"] + 1
-        return count_words(subreddit, newlist, body["data"]["after"], recursive)
+        return count_words(subreddit, newlist, body["data"]["after"])
     else:
         newlist = word_list
         if type(word_list[0]) is str:
@@ -78,5 +75,5 @@ def count_words(subreddit, word_list, after=None, recursive=True):
 # Example usage:
 subreddit = "unpopular"
 keywords = ['down', 'vote', 'downvote', 'you', 'her', 'unpopular', 'politics']
-output = count_words(subreddit, keywords, recursive=False)
+output = count_words(subreddit, keywords)
 print(output)
