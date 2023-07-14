@@ -31,8 +31,8 @@ def count_words(subreddit, word_list, after=None):
                     temp.append({"key": i.lower(), "count": 0, "times": 1})
                 else:
                     item = list(filter(
-                                lambda search: search['key'] == i.lower(),
-                                temp))
+                        lambda search: search['key'] == i.lower(),
+                        temp))
                     if len(item) > 0:
                         item[0]["times"] = item[0]["times"] + 1
             newlist = temp
@@ -51,8 +51,8 @@ def count_words(subreddit, word_list, after=None):
                     temp.append({"key": i.lower(), "count": 0, "times": 1})
                 else:
                     item = list(filter(
-                                lambda search: search['key'] == i.lower(),
-                                temp))
+                        lambda search: search['key'] == i.lower(),
+                        temp))
                     if len(item) > 0:
                         item[0]["times"] = item[0]["times"] + 1
             newlist = temp
@@ -69,4 +69,9 @@ def count_words(subreddit, word_list, after=None):
         for i in sorted_list:
             if i["count"] > 0:
                 print("{}: {}".format(i["key"], i["count"] * i["times"]))
-        return
+
+
+# Example usage:
+subreddit = "unpopular"
+keywords = ['down', 'vote', 'downvote', 'you', 'her', 'unpopular', 'politics']
+count_words(subreddit, keywords)
