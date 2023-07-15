@@ -4,14 +4,13 @@ import json
 import requests
 
 
-def count_words(subreddit, word_list, after="", words_count={}):
+def count_words(subreddit, word_list, after="", count=[]):
     """ prints a sorted count of given keywords """
 
     if after == "":
         count = [0] * len(word_list)
 
-    url = "https://www.reddit.com/r/{}/hot.json?limit=100" \
-        .format(subreddit)
+    url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
     request = requests.get(url,
                            params={'after': after},
                            allow_redirects=False,
